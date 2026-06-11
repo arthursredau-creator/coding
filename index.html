@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROADBOOK — A Driver's Field Guide to Five Continents</title>
+<meta name="description" content="Road conditions, alcohol limits, fines and enforcement risk across 15 countries on 5 driving routes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ECEBE2;
+    --paper-deep:#E3E2D7;
+    --ink:#23261F;
+    --ink-soft:#4A4E44;
+    --line:rgba(35,38,31,.18);
+    --grid:rgba(35,38,31,.055);
+    --r1:#B5382C;
+    --r2:#C07A28;
+    --r3:#2B5CA8;
+    --r4:#3F7A4D;
+    --r5:#74508F;
+    --hazard:#D9A521;
+    --chip-low:#3F7A4D;
+    --chip-mod:#C07A28;
+    --chip-high:#B5382C;
+    --chip-extreme:#7A1F15;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    font-family:'Barlow',system-ui,sans-serif;
+    background:
+      repeating-linear-gradient(0deg,var(--grid) 0 1px,transparent 1px 56px),
+      repeating-linear-gradient(90deg,var(--grid) 0 1px,transparent 1px 56px),
+      var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    font-size:16px;
+  }
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--r3);outline-offset:3px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* ============ TOP BAR ============ */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--ink);color:var(--paper);
+    border-bottom:4px solid var(--hazard);
+  }
+  .topbar .wrap{display:flex;align-items:center;gap:20px;height:54px;}
+  /* scroll progress — eats the amber strip */
+  .topbar::after{
+    content:"";position:absolute;left:0;bottom:-4px;
+    height:4px;width:calc(var(--scrollp,0)*100%);
+    background:var(--ink);
+  }
+  .brand{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:20px;letter-spacing:.14em;
+    text-decoration:none;white-space:nowrap;
+  }
+  .brand span{color:var(--hazard)}
+  .topnav{display:flex;gap:2px;margin-left:auto;overflow-x:auto}
+  .topnav a{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;font-size:14px;letter-spacing:.1em;
+    text-decoration:none;padding:6px 12px;
+    border-radius:3px;white-space:nowrap;opacity:.85;
+  }
+  .topnav a:hover{background:rgba(255,255,255,.12);opacity:1}
+  .topnav .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;transform:translateY(.5px)}
+
+  /* ============ HERO ============ */
+  .hero{padding:84px 0 0;position:relative}
+  .hero-kicker{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;
+    font-size:clamp(64px,12vw,150px);
+    line-height:.9;letter-spacing:.015em;
+    text-transform:uppercase;
+  }
+  .hero h1 em{font-style:normal;color:var(--r1)}
+  .hero-sub{
+    max-width:620px;margin-top:26px;
+    font-size:18px;color:var(--ink-soft);
+  }
+  .hero-sub strong{color:var(--ink)}
+
+  /* the road */
+  .road{
+    margin-top:64px;height:74px;
+    background:#2C2F29;
+    position:relative;overflow:hidden;
+    border-top:5px solid var(--ink);border-bottom:5px solid var(--ink);
+  }
+  .road::before{
+    content:"";
+    position:absolute;left:-80px;right:-80px;top:50%;
+    height:5px;margin-top:-2.5px;
+    background:repeating-linear-gradient(90deg,#E8E6DA 0 46px,transparent 46px 92px);
+    animation:drive 2.6s linear infinite;
+  }
+  .road::after{
+    content:"";
+    position:absolute;left:0;right:0;
+    top:8px;height:3px;
+    background:#E8E6DA;box-shadow:0 47px 0 #E8E6DA;opacity:.55;
+  }
+  @keyframes drive{from{transform:translateX(0)}to{transform:translateX(-92px)}}
+
+  /* ============ LEGEND / ROUTE INDEX ============ */
+  .legend{padding:64px 0 22px}
+  .legend h2{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;font-size:15px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:22px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .legend h2::after{content:"";flex:1;height:1px;background:var(--line)}
+  .legend-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .legend a{
+    display:block;text-decoration:none;
+    background:var(--paper-deep);
+    padding:20px 18px 22px;
+    transition:background .15s ease;
+    position:relative;
+  }
+  .legend a:hover{background:#DBDACB}
+  .legend .sample{height:5px;margin-bottom:14px;background:repeating-linear-gradient(90deg,var(--c) 0 18px,transparent 18px 26px)}
+  .legend .rno{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--ink-soft);}
+  .legend .rname{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:23px;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;margin:4px 0 6px;}
+  .legend .rsub{font-size:13.5px;color:var(--ink-soft)}
+
+  /* ============ ROUTE SECTIONS ============ */
+  .route{padding:88px 0 30px;scroll-margin-top:70px}
+  .route-head{
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:0 30px;
+    position:relative;
+  }
+  .route-line{
+    grid-row:1 / span 3;
+    position:relative;
+    display:flex;justify-content:center;
+  }
+  .route-line::before{
+    content:"";
+    position:absolute;top:0;bottom:-30px;left:50%;width:5px;margin-left:-2.5px;
+    background:repeating-linear-gradient(180deg,var(--c) 0 22px,transparent 22px 34px);
+  }
+  .shield{
+    position:sticky;top:78px;
+    width:64px;height:74px;
+    background:var(--ink);color:var(--paper);
+    border:3px solid var(--c);
+    border-radius:8px 8px 26px 26px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Barlow Condensed',sans-serif;
+    z-index:2;
+  }
+  .shield .sn{font-weight:700;font-size:30px;line-height:1}
+  .shield .sl{font-size:10px;letter-spacing:.2em;font-weight:600;color:var(--c)}
+  .route-eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--c);margin-bottom:10px;font-weight:500;
+  }
+  .route h2{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;text-transform:uppercase;
+    font-size:clamp(40px,6vw,66px);
+    line-height:.95;letter-spacing:.01em;
+    margin-bottom:22px;
+  }
+  .route-overview{
+    max-width:760px;
+    font-size:16.5px;color:var(--ink-soft);
+    margin-bottom:44px;
+  }
+  .route-overview::first-letter{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:2.4em;line-height:.8;
+    float:left;padding:6px 10px 0 0;color:var(--ink);
+  }
+
+  /* ============ COUNTRY CARDS ============ */
+  .cards{
+    grid-column:2;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    align-items:stretch;
+  }
+  .card{
+    background:#F4F3EB;
+    border:1.5px solid var(--ink);
+    box-shadow:5px 5px 0 rgba(35,38,31,.16);
+    display:flex;flex-direction:column;
+    height:100%;
+    transition:transform .18s ease,box-shadow .18s ease;
+  }
+  .card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(35,38,31,.2)}
+  .card-haz{
+    background-image:repeating-linear-gradient(
+      45deg,
+      var(--ink) 0px,var(--ink) 9px,
+      var(--hazard) 9px,var(--hazard) 18px
+    );
+    background-size:25.46px 25.46px;
+    animation:hazard-move 3.5s linear infinite;
+    color:#fff;flex-shrink:0;
+  }
+  @keyframes hazard-move{from{background-position:0 0}to{background-position:25.46px 0}}
+  .card-haz span{
+    display:block;background:var(--ink);
+    margin:5px;padding:4px 10px;
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:center;
+  }
+  .card-top{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;padding:18px 18px 14px;
+    border-bottom:1.5px solid var(--ink);
+    flex-shrink:0;
+  }
+  .card h3{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:30px;line-height:1;
+    text-transform:uppercase;letter-spacing:.015em;
+  }
+  .side{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .side svg{display:block}
+  .side .lbl{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.1em;color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+  .rows{flex:1;display:flex;flex-direction:column}
+  .row{padding:13px 18px;border-bottom:1px solid var(--line);}
+  .row:last-child{border-bottom:0}
+  .row .k{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--c);font-weight:500;margin-bottom:3px;
+  }
+  .row .v{font-size:14.5px;line-height:1.5}
+  .row .v b{font-weight:600}
+  /* warning row (driving side swap, etc.) */
+  .row-warn{background:#2C2F29}
+  .row-warn .k{color:var(--hazard)}
+  .row-warn .v{color:rgba(236,235,226,.82);font-size:13.5px}
+  .risk{
+    padding:13px 18px;
+    background:var(--paper-deep);
+    border-top:1.5px solid var(--ink);
+    flex-shrink:0;
+  }
+  .risk .k{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:500;margin-bottom:6px;
+  }
+  .chip{
+    display:inline-block;
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+    color:#fff;background:var(--chipc);
+    padding:2px 10px 3px;border-radius:3px;
+    margin-right:8px;vertical-align:1px;
+  }
+  .risk .v{font-size:13.5px;color:var(--ink-soft);display:inline}
+
+  /* ============ REF SECTIONS ============ */
+  .ref{padding:96px 0 80px;scroll-margin-top:70px}
+  .ref h2{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:clamp(34px,5vw,52px);
+    text-transform:uppercase;line-height:1;margin-bottom:8px;
+  }
+  .ref p{color:var(--ink-soft);margin-bottom:28px;max-width:600px}
+  .table-scroll{overflow-x:auto;border:1.5px solid var(--ink);background:#F4F3EB;box-shadow:5px 5px 0 rgba(35,38,31,.16)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:780px}
+  th{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:left;background:var(--ink);color:var(--paper);padding:10px 14px;
+  }
+  td{
+    padding:9px 14px;border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;white-space:nowrap;
+  }
+  td.cname{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:16px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;
+  }
+  td .rl{display:inline-block;width:14px;height:4px;margin-right:9px;vertical-align:2px}
+  tr:last-child td{border-bottom:0}
+  td .chip{font-size:12px;padding:1px 8px 2px;margin:0}
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--ink);color:var(--paper);
+    border-top:4px solid var(--hazard);
+    padding:40px 0 48px;
+  }
+  footer .wrap{display:flex;flex-wrap:wrap;gap:18px 40px;align-items:baseline}
+  footer .fb{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:.14em}
+  footer .fb span{color:var(--hazard)}
+  footer p{font-family:'IBM Plex Mono',monospace;font-size:12px;opacity:.7;letter-spacing:.04em}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:980px){
+    .cards{grid-template-columns:1fr 1fr}
+    .legend-grid{grid-template-columns:1fr 1fr}
+    .legend a:last-child{grid-column:1 / -1}
+  }
+  @media(max-width:680px){
+    .route-head{grid-template-columns:1fr}
+    .route-line{display:none}
+    .cards{grid-template-columns:1fr;grid-column:1}
+    .legend-grid{grid-template-columns:1fr}
+    .legend a:last-child{grid-column:auto}
+    .topnav a .txt{display:none}
+    .topnav .dot{margin-right:0}
+    .topnav a{padding:6px 10px}
+    .hero{padding-top:56px}
+  }
+
+  /* ============ ODOMETER ============ */
+  #odometer{
+    position:fixed;bottom:20px;right:20px;z-index:100;
+    background:#23261F;border:1.5px solid rgba(217,165,33,.4);
+    padding:10px 14px 12px;min-width:152px;
+    box-shadow:0 2px 14px rgba(0,0,0,.5);
+  }
+  .odo-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:rgba(217,165,33,.65);margin-bottom:6px;font-weight:500;
+  }
+  .odo-digits{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:28px;font-weight:500;letter-spacing:.06em;
+    color:#D9A521;display:flex;align-items:baseline;gap:5px;line-height:1;
+  }
+  .odo-unit{font-size:13px;opacity:.55}
+  @media(max-width:680px){
+    #odometer{padding:7px 10px 9px;min-width:116px}
+    .odo-digits{font-size:20px}
+    .odo-label{font-size:9px}
+  }
+
+  /* ============ SPEED LIMIT CHIPS ============ */
+  .spd{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;
+    border:1px solid var(--c);padding:2px 7px;border-radius:3px;
+    margin:0 3px 3px 0;white-space:nowrap;
+  }
+
+  /* ============ GLOVEBOX CHECKLIST ============ */
+  .glov-list{list-style:none;padding:14px 18px;display:flex;flex-direction:column;gap:6px}
+  .glov-list li{font-size:13px;line-height:1.45;padding-left:16px;position:relative}
+  .glov-list li::before{content:"▪";position:absolute;left:0;color:var(--c);font-size:11px;top:2px}
+  .glov-n{color:var(--ink-soft);font-size:12px}
+  .glov-list li.glov-opt{color:var(--ink-soft)}
+  .glov-list li.glov-opt::before{content:"◦";color:var(--ink-soft)}
+  .glov-count{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;
+    letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;flex-shrink:0;
+  }
+
+  /* ============ CARD NIGHT BANNER ============ */
+  .card-night{background:#2C2F29;color:#fff;flex-shrink:0}
+  .card-night span{
+    display:block;background:var(--ink);
+    margin:5px;padding:4px 10px;
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    text-align:center;
+  }
+
+  /* ============ RISK LEGEND ============ */
+  .risk-legend{margin-top:28px}
+  .risk-legend-chips{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .risk-legend-lbl{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  .risk-legend-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);margin-top:7px;}
+
+  /* ============ REVEAL ON SCROLL ============ */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+  .rv-in{opacity:1;transform:none}
+
+  /* ============ BAC CHART (SOBRIETY LINE) ============ */
+  .bac-chart{border:1.5px solid var(--ink);background:#F4F3EB;box-shadow:5px 5px 0 rgba(35,38,31,.16);padding:18px 20px 16px;}
+  .bac-scale{display:grid;grid-template-columns:150px 1fr 52px;gap:12px;margin-bottom:10px}
+  .bac-scale-track{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft);}
+  .bac-row{display:grid;grid-template-columns:150px 1fr 52px;gap:12px;align-items:center;padding:4px 0}
+  .bac-name{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+    white-space:nowrap;display:flex;align-items:center;gap:8px;
+  }
+  .bac-name::before{content:"";width:12px;height:4px;background:var(--c);flex-shrink:0}
+  .bac-zt{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--chip-high);border:1px solid currentColor;padding:0 5px;border-radius:3px;
+  }
+  .bac-track{height:12px;background:var(--paper-deep);position:relative;background-image:repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),var(--line) calc(25% - 1px) 25%);}
+  .bac-bar{height:100%;background:var(--c)}
+  .bac-val{font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-align:right}
+  .bac-val.zero{color:var(--chip-high);font-weight:500}
+  .bac-foot{margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft)}
+  @media(max-width:680px){
+    .bac-scale{grid-template-columns:92px 1fr 40px;gap:8px}
+    .bac-row{grid-template-columns:92px 1fr 40px;gap:8px}
+    .bac-name{font-size:13px}
+    .bac-zt{display:none}
+  }
+
+  /* ============ PRINT ============ */
+  @media print{
+    .topbar,#odometer,.road{display:none}
+    body{background:#fff}
+    .card{box-shadow:none;break-inside:avoid}
+    .table-scroll,.bac-chart{box-shadow:none}
+    .route{padding:34px 0 10px}
+    .ref{padding:40px 0 30px}
+    .shield{position:static}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<nav class="topbar" aria-label="Route navigation">
+  <div class="wrap">
+    <a class="brand" href="#top">ROAD<span>BOOK</span></a>
+    <div class="topnav">
+      <a href="#r1"><span class="dot" style="background:var(--r1)"></span><span class="txt">N. AMERICA</span></a>
+      <a href="#r2"><span class="dot" style="background:var(--r2)"></span><span class="txt">S. AMERICA</span></a>
+      <a href="#r3"><span class="dot" style="background:var(--r3)"></span><span class="txt">EUROPE</span></a>
+      <a href="#r4"><span class="dot" style="background:var(--r4)"></span><span class="txt">AFRICA</span></a>
+      <a href="#r5"><span class="dot" style="background:var(--r5)"></span><span class="txt">ASIA</span></a>
+      <a href="#glovebox"><span class="dot" style="background:var(--hazard)"></span><span class="txt">GLOVEBOX</span></a>
+      <a href="#ref"><span class="dot" style="background:var(--paper);opacity:.6"></span><span class="txt">REFERENCE</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="hero-kicker">A driver's field guide · 5 continents · 15 borders · 2 driving sides · ≈ 19,400 km</p>
+    <h1>The world,<br>by <em>road.</em></h1>
+    <p class="hero-sub">Five long-haul driving routes across five continents — and what actually happens behind the wheel on each one. <strong>Road quality, alcohol limits, fines, and how likely you are to get caught.</strong> Compiled the way a rally roadbook is: no romance, just the conditions ahead.</p>
+    <div class="risk-legend">
+      <div class="risk-legend-chips">
+        <span class="risk-legend-lbl">Fine Risk:</span>
+        <span class="chip" style="--chipc:var(--chip-low);background:var(--chip-low)">Low</span>
+        <span class="chip" style="--chipc:var(--chip-mod);background:var(--chip-mod)">Moderate</span>
+        <span class="chip" style="--chipc:var(--chip-high);background:var(--chip-high)">High</span>
+        <span class="chip" style="--chipc:var(--chip-extreme);background:var(--chip-extreme)">Extreme</span>
+      </div>
+      <div class="risk-legend-note">Extreme = automated enforcement, no human discretion involved.</div>
+    </div>
+  </div>
+  <div class="road" role="presentation"></div>
+</header>
+
+<!-- ============ LEGEND ============ -->
+<section class="legend">
+  <div class="wrap">
+    <h2>Route Legend</h2>
+    <div class="legend-grid">
+      <a href="#r1" style="--c:var(--r1)">
+        <div class="sample"></div>
+        <div class="rno">ROUTE 01 · NORTH AMERICA</div>
+        <div class="rname">Pan-American Highway</div>
+        <div class="rsub">United States → Mexico → Guatemala</div>
+      </a>
+      <a href="#r2" style="--c:var(--r2)">
+        <div class="sample"></div>
+        <div class="rno">ROUTE 02 · SOUTH AMERICA</div>
+        <div class="rname">The Andean Backbone</div>
+        <div class="rsub">Chile → Argentina → Bolivia</div>
+      </a>
+      <a href="#r3" style="--c:var(--r3)">
+        <div class="sample"></div>
+        <div class="rno">ROUTE 03 · EUROPE</div>
+        <div class="rname">Mediterranean Coastline</div>
+        <div class="rsub">France → Italy → Spain</div>
+      </a>
+      <a href="#r4" style="--c:var(--r4)">
+        <div class="sample"></div>
+        <div class="rno">ROUTE 04 · AFRICA</div>
+        <div class="rname">The Southern Explorer</div>
+        <div class="rsub">South Africa → Botswana → Zimbabwe</div>
+      </a>
+      <a href="#r5" style="--c:var(--r5)">
+        <div class="sample"></div>
+        <div class="rno">ROUTE 05 · ASIA</div>
+        <div class="rname">Southeast Asian Loop</div>
+        <div class="rsub">Thailand → Malaysia → Laos</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROUTE 1 ============ -->
+<section class="route" id="r1" style="--c:var(--r1)">
+  <div class="wrap route-head">
+    <div class="route-line"><div class="shield"><div class="sn">01</div><div class="sl">ROUTE</div></div></div>
+    <div>
+      <p class="route-eyebrow">North America · 3 countries · ≈ 6,200 km · right-hand traffic throughout</p>
+      <h2>The Pan-American Highway</h2>
+      <p class="route-overview">North America spans some of the world's most developed highway systems down to mountain roads with no guardrails. The US and Canada sit among the safer high-income countries but still trail Western Europe significantly. Mexico occupies a middle tier where infrastructure quality and enforcement vary dramatically by region. Central America has some of the highest road death rates in the western hemisphere, driven by poor infrastructure, low enforcement, and high motorcycle and pedestrian exposure. Across the continent, drunk driving remains a leading cause of fatalities, and speed enforcement has been increasingly automated in the north while remaining almost entirely manual in the south.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card-top">
+          <h3>United States</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r1)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Excellent on interstates; deteriorating with major potholes in older urban cities.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 113</span> <span class="spd">Nat 88</span> <span class="spd">Urban 40</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.08% BAC.</b> Zero tolerance under 21.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Speeding costs $100–$300. Going 25–32 km/h (15–20 mph) over triggers criminal reckless driving charges and immediate arrest.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">Heavy police presence on state highways and local speed traps.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>Mexico</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r1)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Good on paid highways (Cuotas). Poor with severe potholes and unpainted speed bumps (Topes) on free roads (Libres).</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 110</span> <span class="spd">Nat 90</span> <span class="spd">Urban 50</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.08% BAC</b> in most states. <b>0.00%</b> in Mexico City and Guadalajara.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">$50–$150 on paper. Systemic roadside corruption means drivers frequently face illegal bribe demands to avoid vehicle impoundment.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-mod)"><div class="k">Fine Risk</div><span class="chip">Moderate</span><span class="v">Highest near tourist zones, borders, and urban entry points.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-haz"><span>⚠ Avoid at night · No night driving</span></div>
+        <div class="card-top">
+          <h3>Guatemala</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r1)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Poor. Narrow mountain roads, no guardrails, mudslides, unmapped potholes.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Nat 80</span> <span class="spd">Urban 40</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b></div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Very low. Official fines rarely processed for foreigners. Stops used to inspect documents or solicit bribes.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-low)"><div class="k">Fine Risk</div><span class="chip">Low</span><span class="v">Enforcement is entirely manual, erratic police checkpoints only.</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROUTE 2 ============ -->
+<section class="route" id="r2" style="--c:var(--r2)">
+  <div class="wrap route-head">
+    <div class="route-line"><div class="shield"><div class="sn">02</div><div class="sl">ROUTE</div></div></div>
+    <div>
+      <p class="route-eyebrow">South America · 3 countries · ≈ 5,400 km · right-hand traffic throughout</p>
+      <h2>The Andean Backbone</h2>
+      <p class="route-overview">South America's road safety picture is one of sharp contrasts. The southern cone — Chile, Argentina, Uruguay — has made serious progress over the past decade and now approaches lower-middle European rates. The Andean countries, particularly Bolivia, Venezuela, and Ecuador, remain among the most dangerous in the world relative to population. Road quality drops significantly with altitude and remoteness. Motorcycles are a growing factor in fatalities across the continent. Enforcement is generally stronger in urban centers and near-nonexistent in rural areas, and corruption at checkpoints is a documented issue in several countries.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card-top">
+          <h3>Chile</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r2)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Excellent. Toll highways (Ruta 5) matching European standards.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 120</span> <span class="spd">Nat 100</span> <span class="spd">Urban 60</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.03% BAC.</b> Ley Emilia (2012 law: mandatory prison if drunk driving causes injury or death).</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Severe. Police confiscate physical driver's licenses from foreigners on the spot until resolved at a municipal court.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">Professional enforcement on all major routes.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>Argentina</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r2)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Good on major national routes. Harsh gravel tracks (Ruta 40) in remote southern regions.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 130</span> <span class="spd">Nat 110</span> <span class="spd">Urban 60</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.00% BAC.</b> Zero tolerance across all national routes.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Moderate. Automated radar fines exist but payment tracking for foreign plates is fragmented.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">High inside Buenos Aires province. Near-zero in deep Patagonia.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-haz"><span>⚠ Expect roadblocks · No night driving</span></div>
+        <div class="card-top">
+          <h3>Bolivia</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r2)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Very poor. High-altitude unpaved tracks, missing bridges, frequent roadblocks from social protests.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Nat 80</span> <span class="spd">Urban 40</span> <span class="spd">Mountain 30</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.00% BAC.</b> Strict zero tolerance.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Unpredictable. Official fines are low; unofficial cash demands at remote checkpoints scale with what you appear to earn. Fuel stations legally charge foreign plates triple the local rate.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">High for foreigners.</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROUTE 3 ============ -->
+<section class="route" id="r3" style="--c:var(--r3)">
+  <div class="wrap route-head">
+    <div class="route-line"><div class="shield"><div class="sn">03</div><div class="sl">ROUTE</div></div></div>
+    <div>
+      <p class="route-eyebrow">Europe · 3 countries · ≈ 2,900 km · right-hand traffic throughout</p>
+      <h2>The Mediterranean Coastline</h2>
+      <p class="route-overview">Europe has the lowest road death rate of any continent and has been cutting fatalities consistently since the 1990s. The EU target of halving deaths from the 2019 baseline by 2030 is within reach in some countries but stalling in others. Automated enforcement — fixed cameras, average-speed systems, digital fine routing — is the norm across Western and Central Europe. Infrastructure quality is generally excellent on major routes, with rural and Eastern European roads being the main exceptions. Drunk driving and speeding remain the primary causes of death. The continent is also leading on vehicle safety standards through Euro NCAP, which has pushed passive safety technology significantly forward.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card-top">
+          <h3>France</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r3)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Superb. Highly maintained paid autoroutes throughout.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 130</span> <span class="spd">Nat 80</span> <span class="spd">Urban 50</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b> 0.02% for novice drivers.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Going 50+ km/h over the limit triggers an immediate €1,500 fine, roadside driving ban, and vehicle confiscation.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-extreme)"><div class="k">Fine Risk</div><span class="chip">Extreme</span><span class="v">Unified digital systems auto-charge rental company credit cards.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>Italy</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r3)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Good on paid Autostrade. Variable on rural regional roads with poor signage.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 130</span> <span class="spd">Nat 90</span> <span class="spd">Urban 50</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b> 0.00% for drivers under 21 or with less than 3 years experience.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Entering a Restricted Traffic Zone (ZTL) without a permit costs up to €110 per camera flash. Speeding fines scale higher at night.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-extreme)"><div class="k">Fine Risk</div><span class="chip">Extreme</span><span class="v">In historic cities and on highways via automated Tutor average-speed camera network. Low on southern rural roads.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>Spain</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r3)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Excellent. Vast network of paid (Autopistas) and free (Autovías) highways.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 120</span> <span class="spd">Nat 90</span> <span class="spd">Urban 50</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b> 0.03% for professional and novice drivers.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">€100 to €600. 50% discount if paid within 20 days. Serious offenses trigger criminal charges.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">Hidden mobile radar vans and Pegasus police helicopters overhead.</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROUTE 4 ============ -->
+<section class="route" id="r4" style="--c:var(--r4)">
+  <div class="wrap route-head">
+    <div class="route-line"><div class="shield"><div class="sn">04</div><div class="sl">ROUTE</div></div></div>
+    <div>
+      <p class="route-eyebrow">Africa · 3 countries · ≈ 2,700 km · left-hand traffic throughout</p>
+      <h2>The Southern Explorer</h2>
+      <p class="route-overview">Africa has the highest road fatality rate of any continent — roughly double the global average per 100,000 population — and the only region where deaths are still rising year on year. Infrastructure gaps, a rapidly growing but poorly regulated vehicle fleet, minimal automated enforcement, and limited post-crash emergency response all contribute. Southern Africa performs better than the continental average, with countries like South Africa and Botswana having more developed road systems and enforcement capacity. Night driving is dangerous across most of the continent due to unlit roads, wandering livestock, and limited emergency services. Left-hand driving is standard throughout southern and eastern Africa.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card-top">
+          <h3>South Africa</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="7" y="7" width="7" height="12" rx="1.5" fill="var(--r4)"/></svg>
+            <span class="lbl">Left</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Good on national N-routes. Dangerous in urban sectors — missing manhole covers, deep potholes.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 120</span> <span class="spd">Nat 100</span> <span class="spd">Urban 60</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05%</b> on a breathalyzer or <b>0.02%</b> on a blood test — same stop, two methods, both enforceable.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Speeding 40+ km/h over the limit means automatic criminal arrest, no fine option.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">High in major cities. Non-existent on remote dirt sectors.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-night"><span>🌙 No night driving</span></div>
+        <div class="card-top">
+          <h3>Botswana</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="7" y="7" width="7" height="12" rx="1.5" fill="var(--r4)"/></svg>
+            <span class="lbl">Left</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Good on main corridors. Veterinary checkpoints require driving through disinfectant dips. Unfenced roads mean constant livestock collision risk.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Nat 120</span> <span class="spd">Urban 60</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.08% BAC.</b></div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Moderate. Handheld radar guns, official paper tickets, standardized fees.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">High through rural villages. Low on open desert highways.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-haz"><span>⚠ Go prepared · No night driving</span></div>
+        <div class="card-top">
+          <h3>Zimbabwe</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="7" y="7" width="7" height="12" rx="1.5" fill="var(--r4)"/></svg>
+            <span class="lbl">Left</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Very poor. Crumbling tarmac, completely unlit highways, wandering elephants, tire-shredding potholes.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Nat 100</span> <span class="spd">Urban 60</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.08% BAC.</b></div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Moderate on paper. Officers demand immediate roadside cash for minor defects like missing reflective tape.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-extreme)"><div class="k">Fine Risk</div><span class="chip">Extreme</span><span class="v">Foreign vehicles are systematically stopped at dense roadblock networks.</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROUTE 5 ============ -->
+<section class="route" id="r5" style="--c:var(--r5)">
+  <div class="wrap route-head">
+    <div class="route-line"><div class="shield"><div class="sn">05</div><div class="sl">ROUTE</div></div></div>
+    <div>
+      <p class="route-eyebrow">Asia · 3 countries · ≈ 2,200 km · driving side changes at the Laos border</p>
+      <h2>The Southeast Asian Loop</h2>
+      <p class="route-overview">Asia accounts for the majority of the world's road deaths in absolute numbers, driven by China, India, and Southeast Asia. Southeast Asia specifically has some of the highest death rates globally, almost entirely driven by motorcycle culture — two and three wheelers account for 60–80% of fatalities in countries like Thailand and Vietnam. Infrastructure quality ranges from world-class in Singapore, Japan, and parts of Malaysia to extremely poor in Laos, Myanmar, and rural Indonesia. Enforcement is inconsistent but automated camera systems are expanding rapidly. The diversity across the continent is extreme — traveling through Southeast Asia means adapting to different driving sides, road surfaces, and enforcement realities within a single trip.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card-top">
+          <h3>Thailand</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="7" y="7" width="7" height="12" rx="1.5" fill="var(--r5)"/></svg>
+            <span class="lbl">Left</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Excellent on national highways. Chaotic and congested inside cities.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 120</span> <span class="spd">Nat 90</span> <span class="spd">Urban 50</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b> 0.02% under 20 or on a temporary license.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">500–1,000 Thai Baht (~$15–$30). Flat fees, no income scaling.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">At urban checkpoints. Zero in rural northern villages.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>Malaysia</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="7" y="7" width="7" height="12" rx="1.5" fill="var(--r5)"/></svg>
+            <span class="lbl">Left</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Outstanding. The North-South Expressway matches top Western European standards.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Mwy 110</span> <span class="spd">Nat 90</span> <span class="spd">Urban 50</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b> Breathalyzer checkpoints strictly enforced.</div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">$30–$70 USD equivalent. Unpaid fines block the vehicle at international borders.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-high)"><div class="k">Fine Risk</div><span class="chip">High</span><span class="v">Automated speed cameras (AES) and laser highway patrols throughout.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="card-haz"><span>⚠ 4WD only · No night driving</span></div>
+        <div class="card-top">
+          <h3>Laos</h3>
+          <div class="side">
+            <svg width="40" height="26" viewBox="0 0 40 26" aria-hidden="true"><rect x="2" y="1" width="36" height="24" rx="2" fill="#2C2F29"/><line x1="20" y1="3" x2="20" y2="23" stroke="#E8E6DA" stroke-width="2" stroke-dasharray="4 3"/><rect x="26" y="7" width="7" height="12" rx="1.5" fill="var(--r5)"/></svg>
+            <span class="lbl">Right</span>
+          </div>
+        </div>
+        <div class="rows">
+          <div class="row"><div class="k">Road Quality</div><div class="v">Extremely poor. Unpaved mountain tracks, unlit routes, craters that destroy sedan axles.</div></div>
+          <div class="row row-warn"><div class="k">⚠ Driving Side Swap</div><div class="v">Crosses from left-hand (Thailand) to right-hand traffic at the border. One of the few places on earth where this happens mid-route. Plan the crossing in daylight.</div></div>
+          <div class="row"><div class="k">Speed Limits</div><div class="v"><span class="spd">Nat 80</span> <span class="spd">Urban 40</span></div></div>
+          <div class="row"><div class="k">Alcohol Limit</div><div class="v"><b>0.05% BAC.</b></div></div>
+          <div class="row"><div class="k">Fines</div><div class="v">Very low flat fees. Manual paper logging, immediate cash settlements.</div></div>
+        </div>
+        <div class="risk" style="--chipc:var(--chip-low)"><div class="k">Fine Risk</div><span class="chip">Low</span><span class="v">Low on open roads. High entering or leaving Vientiane.</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GLOVEBOX CHECKLIST ============ -->
+<section class="ref" id="glovebox">
+  <div class="wrap">
+    <h2>Glovebox Checklist</h2>
+    <p>Legal requirements per country. ▪ = mandatory by law · ◦ = strongly recommended.</p>
+    <div class="cards">
+      <article class="card" style="--c:var(--r1)">
+        <div class="card-top"><h3>United States</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Proof of insurance</b></li>
+          <li><b>Vehicle registration</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r1)">
+        <div class="card-top"><h3>Mexico</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Proof of insurance</b></li>
+          <li><b>Vehicle registration</b></li>
+          <li><b>Reflective vest</b></li>
+          <li class="glov-opt"><b>Fire extinguisher</b> <span class="glov-n">(recommended on toll roads)</span></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r1)">
+        <div class="card-top"><h3>Guatemala</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Vehicle registration</b></li>
+          <li><b>Reflective triangles ×2</b></li>
+          <li><b>Fire extinguisher</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r2)">
+        <div class="card-top"><h3>Chile</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Reflective vest</b></li>
+          <li><b>Fire extinguisher</b></li>
+          <li><b>First aid kit</b></li>
+          <li><b>Tow rope</b></li>
+          <li><b>Reflective triangles ×2</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r2)">
+        <div class="card-top"><h3>Argentina</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Reflective vest</b></li>
+          <li><b>Fire extinguisher</b></li>
+          <li><b>First aid kit</b></li>
+          <li><b>Reflective triangles ×2</b></li>
+          <li><b>Spare wheel</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r2)">
+        <div class="card-top"><h3>Bolivia</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Fire extinguisher</b></li>
+          <li><b>Reflective triangles ×2</b></li>
+          <li><b>Spare wheel</b></li>
+          <li><b>Tow rope</b></li>
+          <li class="glov-opt"><b>Extra fuel</b> <span class="glov-n">recommended</span></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r3)">
+        <div class="card-top"><h3>France</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li class="glov-opt"><b>Breathalyzer</b> <span class="glov-n">(unused, sealed)</span></li>
+          <li class="glov-opt"><b>Reflective vest</b> <span class="glov-n">(in cabin, not boot)</span></li>
+          <li><b>Reflective triangle</b></li>
+          <li><b>Hi-vis jacket per passenger</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r3)">
+        <div class="card-top"><h3>Italy</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Reflective vest</b></li>
+          <li><b>Reflective triangle</b></li>
+          <li class="glov-opt"><b>Fire extinguisher</b> <span class="glov-n">(recommended)</span></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r3)">
+        <div class="card-top"><h3>Spain</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li class="glov-opt"><b>Spare prescription glasses</b> <span class="glov-n">(if driver wears them)</span></li>
+          <li><b>Reflective vest ×2</b></li>
+          <li><b>Reflective triangles ×2</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r4)">
+        <div class="card-top"><h3>South Africa</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Reflective triangle</b></li>
+          <li><b>Fire extinguisher</b></li>
+          <li><b>First aid kit</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r4)">
+        <div class="card-top"><h3>Botswana</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Fire extinguisher</b></li>
+          <li><b>Reflective triangle</b></li>
+          <li><b>Spare wheel</b> <span class="glov-n">(tar)</span></li>
+          <li class="glov-opt"><b>Second spare</b> <span class="glov-n">(off-road)</span></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r4)">
+        <div class="card-top"><h3>Zimbabwe</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Reflective triangles ×2</b></li>
+          <li><b>Fire extinguisher</b></li>
+          <li><b>Reflective tape on vehicle</b></li>
+          <li><b>Carbon copy receipt book</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r5)">
+        <div class="card-top"><h3>Thailand</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Vehicle registration</b></li>
+          <li><b>Insurance certificate</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r5)">
+        <div class="card-top"><h3>Malaysia</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Vehicle registration</b></li>
+          <li><b>Insurance certificate</b></li>
+        </ul>
+      </article>
+      <article class="card" style="--c:var(--r5)">
+        <div class="card-top"><h3>Laos</h3></div>
+        <ul class="glov-list">
+          <li><b>Valid license</b></li>
+          <li><b>Vehicle registration</b></li>
+          <li class="glov-opt"><b>Spare fuel</b> <span class="glov-n">recommended</span></li>
+          <li class="glov-opt"><b>Basic toolkit</b></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOBRIETY LINE ============ -->
+<section class="ref" id="bac">
+  <div class="wrap">
+    <h2>The Sobriety Line</h2>
+    <p>Every legal blood-alcohol ceiling on the trip, drawn to scale. Three of these countries allow nothing at all.</p>
+    <div class="bac-chart">
+      <div class="bac-scale">
+        <div></div>
+        <div class="bac-scale-track">
+          <span>0.00</span><span>0.02</span><span>0.04</span><span>0.06</span><span>0.08</span>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="bac-row" style="--c:var(--r2)">
+        <div class="bac-name"><span class="bac-zt">Zero</span>Argentina</div>
+        <div class="bac-track"><div class="bac-bar" style="width:0%;background:#6B6B6B"></div></div>
+        <div class="bac-val zero">0.00</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r2)">
+        <div class="bac-name"><span class="bac-zt">Zero</span>Bolivia</div>
+        <div class="bac-track"><div class="bac-bar" style="width:0%;background:#6B6B6B"></div></div>
+        <div class="bac-val zero">0.00</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r2)">
+        <div class="bac-name">Chile</div>
+        <div class="bac-track"><div class="bac-bar" style="width:37.5%;background:#C07A28"></div></div>
+        <div class="bac-val">0.03</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r3)">
+        <div class="bac-name">France</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r1)">
+        <div class="bac-name">Guatemala</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r3)">
+        <div class="bac-name">Italy</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r5)">
+        <div class="bac-name">Laos</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r5)">
+        <div class="bac-name">Malaysia</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r4)">
+        <div class="bac-name">South Africa</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r3)">
+        <div class="bac-name">Spain</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r5)">
+        <div class="bac-name">Thailand</div>
+        <div class="bac-track"><div class="bac-bar" style="width:62.5%;background:#B5382C"></div></div>
+        <div class="bac-val">0.05</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r4)">
+        <div class="bac-name">Botswana</div>
+        <div class="bac-track"><div class="bac-bar" style="width:100%;background:#7A1F15"></div></div>
+        <div class="bac-val">0.08</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r1)">
+        <div class="bac-name">Mexico</div>
+        <div class="bac-track"><div class="bac-bar" style="width:100%;background:#7A1F15"></div></div>
+        <div class="bac-val">0.08</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r1)">
+        <div class="bac-name">United States</div>
+        <div class="bac-track"><div class="bac-bar" style="width:100%;background:#7A1F15"></div></div>
+        <div class="bac-val">0.08</div>
+      </div>
+      <div class="bac-row" style="--c:var(--r4)">
+        <div class="bac-name">Zimbabwe</div>
+        <div class="bac-track"><div class="bac-bar" style="width:100%;background:#7A1F15"></div></div>
+        <div class="bac-val">0.08</div>
+      </div>
+
+      <div class="bac-foot">BAC = blood alcohol concentration (g/100ml). Mexico City and Guadalajara enforce 0.00%. South Africa enforces 0.02% via blood test at the same stop. France, Italy, and Spain enforce lower limits for novice or professional drivers.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUICK REFERENCE ============ -->
+<section class="ref" id="ref">
+  <div class="wrap">
+    <h2>Quick Reference</h2>
+    <p>Every border on one page — the appendix you screenshot before losing signal.</p>
+    <div class="risk-legend" style="margin-top:0;margin-bottom:22px">
+      <div class="risk-legend-chips">
+        <span class="risk-legend-lbl">Fine Risk:</span>
+        <span class="chip" style="--chipc:var(--chip-low);background:var(--chip-low)">Low</span>
+        <span class="chip" style="--chipc:var(--chip-mod);background:var(--chip-mod)">Moderate</span>
+        <span class="chip" style="--chipc:var(--chip-high);background:var(--chip-high)">High</span>
+        <span class="chip" style="--chipc:var(--chip-extreme);background:var(--chip-extreme)">Extreme</span>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Country</th><th>Route</th><th>Side</th><th>BAC Limit</th><th>Mwy / Nat / Urban km/h</th><th>Fine Risk</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="cname"><span class="rl" style="background:var(--r1)"></span>United States</td><td>01</td><td>Right</td><td>0.08%</td><td>113 / 88 / 40</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r1)"></span>Mexico</td><td>01</td><td>Right</td><td>0.08% / 0.00% CDMX·GDL</td><td>110 / 90 / 50</td><td><span class="chip" style="background:var(--chip-mod)">Moderate</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r1)"></span>Guatemala</td><td>01</td><td>Right</td><td>0.05%</td><td>— / 80 / 40</td><td><span class="chip" style="background:var(--chip-low)">Low</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r2)"></span>Chile</td><td>02</td><td>Right</td><td>0.03%</td><td>120 / 100 / 60</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r2)"></span>Argentina</td><td>02</td><td>Right</td><td>0.00%</td><td>130 / 110 / 60</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r2)"></span>Bolivia</td><td>02</td><td>Right</td><td>0.00%</td><td>— / 80 / 40</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r3)"></span>France</td><td>03</td><td>Right</td><td>0.05% / 0.02% novice</td><td>130 / 80 / 50</td><td><span class="chip" style="background:var(--chip-extreme)">Extreme</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r3)"></span>Italy</td><td>03</td><td>Right</td><td>0.05% / 0.00% novice</td><td>130 / 90 / 50</td><td><span class="chip" style="background:var(--chip-extreme)">Extreme</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r3)"></span>Spain</td><td>03</td><td>Right</td><td>0.05% / 0.03% novice</td><td>120 / 90 / 50</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r4)"></span>South Africa</td><td>04</td><td>Left</td><td>0.05% breath / 0.02% blood</td><td>120 / 100 / 60</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r4)"></span>Botswana</td><td>04</td><td>Left</td><td>0.08%</td><td>— / 120 / 60</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r4)"></span>Zimbabwe</td><td>04</td><td>Left</td><td>0.08%</td><td>— / 100 / 60</td><td><span class="chip" style="background:var(--chip-extreme)">Extreme</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r5)"></span>Thailand</td><td>05</td><td>Left</td><td>0.05% / 0.02% under 20</td><td>120 / 90 / 50</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r5)"></span>Malaysia</td><td>05</td><td>Left</td><td>0.05%</td><td>110 / 90 / 50</td><td><span class="chip" style="background:var(--chip-high)">High</span></td></tr>
+          <tr><td class="cname"><span class="rl" style="background:var(--r5)"></span>Laos</td><td>05</td><td>Right</td><td>0.05%</td><td>— / 80 / 40</td><td><span class="chip" style="background:var(--chip-low)">Low</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="fb">ROAD<span>BOOK</span></div>
+    <p>Compiled June 2026 · Conditions, limits and enforcement change — verify before you cross the border.</p>
+  </div>
+</footer>
+
+<!-- ============ ODOMETER ============ -->
+<div id="odometer" aria-label="Total distance odometer">
+  <div class="odo-label">Total Distance</div>
+  <div class="odo-digits"><span id="odo-value">00000</span><span class="odo-unit">km</span></div>
+</div>
+
+<script>
+(function(){
+  var el=document.getElementById('odo-value');
+  var total=19400;
+  var raf=false;
+  function update(){
+    var scrolled=window.scrollY||document.documentElement.scrollTop;
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    var pct=max>0?Math.min(scrolled/max,1):0;
+    el.textContent=String(Math.round(pct*total)).padStart(5,'0');
+    document.documentElement.style.setProperty('--scrollp',pct);
+    raf=false;
+  }
+  function onScroll(){if(!raf){raf=true;requestAnimationFrame(update);}}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll,{passive:true});
+  update();
+
+  // glovebox item counts
+  document.querySelectorAll('#glovebox .card').forEach(function(c){
+    var n=c.querySelectorAll('.glov-list li').length;
+    var s=document.createElement('span');
+    s.className='glov-count';
+    s.textContent=n+' items';
+    c.querySelector('.card-top').appendChild(s);
+  });
+
+  // reveal on scroll
+  if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var t=e.target;
+          t.classList.add('rv-in');
+          io.unobserve(t);
+          setTimeout(function(){t.classList.remove('rv','rv-in');},650);
+        }
+      });
+    },{rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.card,.bac-row').forEach(function(el){
+      el.classList.add('rv');io.observe(el);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
